@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoITeens: Твій шлях у світ IT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        #slideContainer {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+        .slide {
+            flex: 0 0 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #ff8c00;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: pulse 2s infinite, colorChange 5s infinite alternate;
+        }
+        p {
+            font-size: 1.6em;
+            max-width: 600px;
+            margin: 10px auto;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 140, 0, 0.3) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 30%),
+                radial-gradient(circle at 50% 50%, rgba(255, 140, 0, 0.2) 0%, transparent 40%);
+            filter: blur(30px);
+            opacity: 0.7;
+            z-index: -1;
+            animation: bgMove 20s infinite alternate;
+        }
+        .styled-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #ff8c00;
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: bold;
+            animation: float 3s infinite, glowPulse 2s infinite;
+        }
+        .icon {
+            font-size: 5em;
+            margin: 20px;
+            animation: rotate 10s linear infinite, bounce 2s infinite;
+        }
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            font-size: 3em;
+            background: none;
+            border: none;
+            color: #ff8c00;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+            opacity: 0.7;
+        }
+        #prevSlide { left: 20px; }
+        #nextSlide { right: 20px; }
+        .nav-button:hover {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        .slide-content {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 80%;
+            animation: fadeIn 1s, slideInFromBottom 1s;
+        }
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background-color: #ff8c00;
+            transition: width 0.3s;
+        }
+        .feature-list {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 800px;
+        }
+        .feature-item {
+            background-color: rgba(255, 140, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            flex-basis: calc(33.333% - 20px);
+            transition: all 0.3s;
+            animation: fadeInUp 1s, glowPulse 2s infinite;
+        }
+        .feature-item:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 140, 0, 0.3);
+        }
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .course-item {
+            background-color: rgba(255, 140, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            animation: fadeInUp 1s, glowPulse 2s infinite;
+        }
+        .course-item:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 140, 0, 0.3);
+        }
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 600px;
+        }
+        .stat-item {
+            text-align: center;
+            animation: fadeInUp 1s, pulse 2s infinite;
+        }
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #ff8c00;
+        }
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -2;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes bgMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes colorChange {
+            0% { color: #ff8c00; }
+            50% { color: #ffa500; }
+            100% { color: #ff4500; }
+        }
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px #ff8c00; }
+            50% { box-shadow: 0 0 20px #ff8c00; }
+            100% { box-shadow: 0 0 5px #ff8c00; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes slideInFromBottom {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-image"></div>
+    <div id="slideContainer">
+        <div class="slide">
+            <div class="bg-animation"></div>
+            <div class="slide-content">
+                <h1>GoITeens</h1>
+                <p>Твій старт у світ IT</p>
+                <div class="icon">🚀</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="bg-animation"></div>
+            <div class="slide-content">
+                <h1>Інновації</h1>
+                <p>Навчайся у кращих</p>
+                <div class="icon">💡</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="bg-animation"></div>
+            <div class="slide-content">
+                <h1>Наші курси</h1>
+                <div class="course-grid">
+                    <div class="course-item">
+                        <h3>Web Development</h3>
+                    </div>
+                    <div class="course-item">
+                        <h3>Python</h3>
+                    </div>
+                    <div class="course-item">
+                        <h3>UI/UX Design</h3>
+                    </div>
+                    <div class="course-item">
+                        <h3>Game Development</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="bg-animation"></div>
+            <div class="slide-content">
+                <h1>Наші переваги</h1>
+                <ul class="feature-list">
+                    <li class="feature-item">Інтерактивні уроки</li>
+                    <li class="feature-item">Досвідчені викладачі</li>
+                    <li class="feature-item">Практичні проекти</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="bg-animation"></div>
+            <div class="slide-content">
+                <h1>Наші досягнення</h1>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-number">90%</div>
+                        <p>Працевлаштування</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <p>Випускників</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="bg-animation"></div>
+            <div class="slide-content">
+                <h1>Приєднуйся!</h1>
+                <p>Почни свій шлях у світ IT</p>
+                <a href="https://goiteens.com" target="_blank" class="styled-button">Почати навчання</a>
+            </div>
+        </div>
+    </div>
+
+    <button id="prevSlide" class="nav-button" aria-label="Попередній слайд">&#8592;</button>
+    <button id="nextSlide" class="nav-button" aria-label="Наступний слайд">&#8594;</button>
+    <div id="progressBar" class="progress-bar"></div>
+
+    <script>
+        const slideContainer = document.getElementById('slideContainer');
+        const slides = document.querySelectorAll('.slide');
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const progressBar = document.getElementById('progressBar');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            slideContainer.style.transform = `translateX(-${index * 100}vw)`;
+            currentSlide = index;
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        prevButton.addEventListener('click', () => showSlide(currentSlide - 1));
+        nextButton.addEventListener('click', () => showSlide(currentSlide + 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
+            if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
+        });
+
+        showSlide(0);
+
+        setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 5000);
+    </script>
+</body>
+</html>
